@@ -57,6 +57,9 @@ classdef DagNN < matlab.mixin.Copyable
     vars
     params
     meta
+    cache % for adagram & rmsprop
+    m % for adam
+    v % for adam 
   end
 
   properties (Transient)
