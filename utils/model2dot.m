@@ -21,7 +21,9 @@ function model2dot(modelPath, outPath, varargin)
 %
 % This file is part of the VLFeat library and is made available under
 % the terms of the BSD license (see the COPYING file).
-run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'matlab', 'vl_setupnn.m'));
+%run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'matlab', 'vl_setupnn.m'));
+addpath matconvnet/matlab; 
+vl_setupnn;
 
 opts.batchSize = 256;
 opts.inputs = [];
@@ -32,6 +34,9 @@ if ~exist(modelPath, 'file')
 end
 fprintf('Loading %s.\n', modelPath);
 obj = load(modelPath);
+if isfield(obj, 'net')
+    obj = obj.net;
+end
 
 if isstruct(obj.layers) % DAGnn format
   net = dagnn.DagNN.loadobj(obj);

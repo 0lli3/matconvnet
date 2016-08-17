@@ -172,7 +172,6 @@ switch lower(opts.loss)
       % null labels denote instances that should be skipped
       instanceWeights = cast(c ~= 0, 'like', c) ;
     end
-
   otherwise
     error('Unknown loss ''%s''.', opts.loss) ;
 end

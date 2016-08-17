@@ -42,7 +42,7 @@ classdef Crop < dagnn.ElementWise
       obj.inputSizes = inputSizes ;
       crop = obj.getAdaptedCrops() ;
       outputSizes{1} = inputSizes{1} - [crop(1)+crop(2), crop(3)+crop(4), 0, 0] ;
-    end
+  end
 
     function rfs = getReceptiveFields(obj)
       rfs(1,1).size = [1 1] ;

@@ -8,9 +8,8 @@ files = dir(fullfile(base,'*.jpg')) ;
 files = fullfile(base, {files.name}) ;
 if numel(files) > 256, files = files(1:256) ; end
 
-for preallocate = [true, false]
-  opts={'verbose','verbose', 'preallocate', preallocate} ;
-  for t=1:4
+opts = {'verbose', 'verbose'};
+for t=1:4
     % simple read
     fprintf('direct read single thread\n') ;
     clear ims ;
@@ -43,15 +42,13 @@ for preallocate = [true, false]
     ims_ = vl_imreadjpeg(files, opts{:}) ;
     indirect(t) = toc ;
     pause(1) ;
-  end
-
-  n = numel(ims) ;
-  fprintf('** test results preallcoate %d\n', preallocate) ;
-  fprintf('\tsingle tread: %.1f pm %.1f\n', mean(n./directSingle), std(n./directSingle)) ;
-  fprintf('\t%d threads: %.1f pm %.1f\n', numThreads, mean(n./direct), std(n./direct)) ;
-  fprintf('\tissue prefetch: %.1f pm %.1f\n', mean(n./prefetch), std(n./prefetch)) ;
-  fprintf('\tretrieve prefetched: %.1f pm %.1f\n', mean(n./indirect), std(n./indirect)) ;
-  fprintf('\n\n') ;
 end
+
+n = numel(ims) ;
+fprintf('\tsingle tread: %.1f pm %.1f\n', mean(n./directSingle), std(n./directSingle)) ;
+fprintf('\t%d threads: %.1f pm %.1f\n', numThreads, mean(n./direct), std(n./direct)) ;
+fprintf('\tissue prefetch: %.1f pm %.1f\n', mean(n./prefetch), std(n./prefetch)) ;
+fprintf('\tretrieve prefetched: %.1f pm %.1f\n', mean(n./indirect), std(n./indirect)) ;
+fprintf('\n\n') ;
 
 return
