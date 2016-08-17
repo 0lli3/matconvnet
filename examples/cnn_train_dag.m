@@ -301,7 +301,7 @@ for p=1:numel(net.params)
         - (1 / batchSize) * net.params(p).der ;
       net.params(p).value = net.params(p).value + thisLR * state.momentum{p} ;
 
-    case 'otherwise'
+    otherwise
       error('Unknown training method ''%s'' for parameter ''%s''.', ...
         net.params(p).trainMethod, ...
         net.params(p).name) ;
@@ -434,6 +434,7 @@ if numGpus > 1
   if exist(opts.memoryMapFile)
     delete(opts.memoryMapFile) ;
   end
+
 end
 if numGpus >= 1 && cold
   fprintf('%s: resetting GPU\n', mfilename)
@@ -443,3 +444,5 @@ if numGpus >= 1 && cold
     spmd, gpuDevice(opts.gpus(labindex)), end
   end
 end
+
+%end
