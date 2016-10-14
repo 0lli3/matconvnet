@@ -10,20 +10,18 @@ classdef HuberLoss < dagnn.ElementWise
 
     methods
         function outputs = forward(obj, inputs, params)
-            pred_reg = inputs{1}; 
-            label_reg = inputs{2}; 
-            label_cls = inputs{3}; 
+            %pred_reg = inputs{1}; 
+            %label_reg = inputs{2}; 
+            %label_cls = inputs{3}; 
             
-            pos = repmat(label_cls>0,[1,1,4,1]);
-            a = abs(pred_reg - label_reg); 
-            b = (a < 1); 
-            t = (b.*(a.^2))*0.5 + (~b).*(a-0.5);
-            outputs{1} = sum(t(pos));
-            
-            n = obj.numAveraged ;
-            m = n + size(inputs{1},4) ;
-            obj.average = (n * obj.average + gather(outputs{1})) / m ;
-            obj.numAveraged = m ;
+            %pos = repmat(label_cls>0,[1,1,4,1]);
+            %a = abs(pred_reg - label_reg); 
+            %b = (a < 1); 
+            %t = (b.*(a.^2))*0.5 + (~b).*(a-0.5);
+            %outputs{1} = sum(t(pos));
+                
+            % compute the loss after we finish hard example mining
+            outputs{1} = 0;
         end
 
         function [derInputs, derParams] = backward(obj, inputs, params, derOutputs)
@@ -40,6 +38,18 @@ classdef HuberLoss < dagnn.ElementWise
             derInputs{2} = [] ;
             derInputs{3} = [] ; 
             derParams = {} ;
+
+            % now we have an updated label_cls from hard example mining
+            pos = repmat(label_cls>0,[1,1,4,1]);
+            a = abs(pred_reg - label_reg); 
+            b = (a < 1); 
+            t = (b.*(a.^2))*0.5 + (~b).*(a-0.5);
+            loss = sum(t(pos));
+
+            n = obj.numAveraged ;
+            m = n + size(inputs{1},4) ;
+            obj.average = (n * obj.average + gather(loss)) / m ;
+            obj.numAveraged = m ;
         end
 
         function reset(obj)
