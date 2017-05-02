@@ -42,3 +42,5 @@ doc/site/theme/js/npm.js
 *.opensdf
 doc/figures/svg/*.idraw
 
+imagenet-*
+compile.m
