@@ -6,20 +6,21 @@ classdef HuberLoss < dagnn.ElementWise
     properties (Transient)
         average = 0
         numAveraged = 0
+        loss_map = []
     end
 
     methods
         function outputs = forward(obj, inputs, params)
-            %pred_reg = inputs{1}; 
-            %label_reg = inputs{2}; 
-            %label_cls = inputs{3}; 
+            pred_reg = inputs{1}; 
+            label_reg = inputs{2}; 
+            label_cls = inputs{3}; 
             
-            %pos = repmat(label_cls>0,[1,1,4,1]);
-            %a = abs(pred_reg - label_reg); 
-            %b = (a < 1); 
-            %t = (b.*(a.^2))*0.5 + (~b).*(a-0.5);
-            %outputs{1} = sum(t(pos));
-                
+            pos = repmat(label_cls>0,[1,1,4,1]);
+            a = abs(pred_reg - label_reg); 
+            b = (a < 1); 
+            t = (b.*(a.^2))*0.5 + (~b).*(a-0.5);
+            obj.loss_map = t .* pos;
+
             % compute the loss after we finish hard example mining
             outputs{1} = 0;
         end

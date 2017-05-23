@@ -11,6 +11,7 @@ if obj.computingDerivative && ~iscell(derOutputs), error('DEROUTPUTS is not a ce
 % -------------------------------------------------------------------------
 % Forward pass
 % -------------------------------------------------------------------------
+obj.holdOn = opts.holdOn ;
 
 % set the input values
 v = obj.getVarIndex(inputs(1:2:end)) ;
